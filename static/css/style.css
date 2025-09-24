@@ -1,0 +1,1049 @@
+/* Reset */
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #e9ecea;
+  color: #333;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Container Utility */
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: auto;
+}
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(to right, #003049, #264653);
+  color: white;
+  padding: 100px 20px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+}
+
+.btn {
+  background-color: #e63946;
+  color: white;
+  padding: 12px 25px;
+  border-radius: 5px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #d62828;
+}
+
+.btn-secondary {
+  background-color: #2a9d8f;
+}
+
+.btn-secondary:hover {
+  background-color: #21867a;
+}
+
+/* About Section */
+.about {
+  padding: 60px 20px;
+  background-color: white;
+  text-align: center;
+}
+
+.about h2 {
+  font-size: 2rem;
+  color: #264653;
+  margin-bottom: 15px;
+}
+
+/* Features Grid */
+.features {
+  padding: 60px 20px;
+  background-color: #e0e6e3;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.feature-card {
+  background-color: white;
+  border-radius: 10px;
+  padding: 30px;
+  flex: 1 1 250px;
+  max-width: 300px;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.952);
+  text-align: center;
+}
+
+.feature-card h3 {
+  color: #003049;
+  margin-bottom: 10px;
+}
+
+/* Call to Action */
+.cta {
+  padding: 80px 20px;
+  background: #264653;
+  color: white;
+  text-align: center;
+}
+
+.cta h2 {
+  font-size: 2.5rem;
+  margin-bottom: 15px;
+}
+
+.cta p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+/* Navbar Styles (make sure this matches base.html if using it) */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.5rem 2rem;
+  background-color: #003049;
+  color: white;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.nav-links a {
+  color: white;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #a8dadc;
+}
+
+.nav-links .btn-logout {
+  background-color: #e63946;
+  padding: 0.5rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.nav-links .btn-logout:hover {
+  background-color: #d62828;
+  color: white;
+}
+
+.logo-link img {
+  height: 80px;
+  width: auto;
+}
+
+.navbar {
+  padding: 1.2rem 2.5rem;
+}
+
+
+.plans {
+  padding: 60px 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.plans h1 {
+  font-size: 2.5rem;
+  color: #003049;
+  margin-bottom: 40px;
+  text-align: center;
+}
+
+.plan-form {
+  background: white;
+  padding: 2rem;
+  margin: 0 auto 3rem;
+  border-radius: 15px;
+  max-width: 800px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plan-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.plan-form label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.plan-form input,
+.plan-form select,
+.plan-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.height-group h3 {
+  color: #003049;
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+
+.height-group .height-inputs {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.height-group .feet-input,
+.height-group .inches-input {
+  flex: 1;
+  position: relative;
+}
+
+.height-group input {
+  padding-right: 3rem;
+  text-align: center;
+  font-size: 1.1rem;
+}
+
+.height-group label {
+  display: block;
+  position: static;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.height-group .unit {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  font-weight: 500;
+}
+
+.height-help {
+  color: #666;
+  font-size: 0.9rem;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.plan-form textarea {
+  resize: vertical;
+  min-height: 80px;
+  font-family: inherit;
+}
+
+.plan-form input:focus,
+.plan-form select:focus {
+  border-color: #003049;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 48, 73, 0.1);
+}
+
+/* Trainer-related styles removed */
+
+.schedule-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.time-slot {
+  background: #e0e0e0;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  color: #333;
+}
+
+.contact-btn {
+  width: 100%;
+  padding: 0.8rem;
+  background: #003049;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 1rem;
+}
+
+.contact-btn:hover {
+  background: #00436a;
+}
+  margin-top: 0.5rem;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;
+  margin-right: 8px;
+}
+
+.suggest-btn {
+  background-color: #003049;
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  font-weight: 600;
+  width: 100%;
+  transition: background-color 0.3s ease;
+}
+
+.suggest-btn:hover {
+  background-color: #00436a;
+}
+
+.suggestion-box {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 15px;
+  margin: 0 auto 3rem;
+  max-width: 800px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.suggestion-box h2 {
+  color: #003049;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.recommendation-details {
+  display: grid;
+  gap: 1rem;
+}
+
+.recommendation-details p {
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  margin: 0;
+}
+
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.plan-card {
+  background-color: white;
+  border-radius: 15px;
+  padding: 2rem;
+  position: relative;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.plan-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+.plan-badge {
+  position: absolute;
+  top: -12px;
+  right: 20px;
+  background-color: #e63946;
+  color: white;
+  padding: 5px 15px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.plan-card h2 {
+  color: #003049;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.plan-features {
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+  text-align: left;
+}
+
+.plan-features li {
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.plan-card .btn {
+  width: 100%;
+  margin-top: 1rem;
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: fit-content; /* Adjust as needed to prevent stretching */
+}
+
+.plan-card.daily .btn {
+  background-color: #2a9d8f;
+}
+
+.plan-card.daily .btn:hover {
+  background-color: #238b7e;
+}
+
+.plan-card.premium .btn {
+  background-color: #e63946;
+}
+
+.plan-card.premium .btn:hover {
+  background-color: #d62828;
+}
+
+.plan-card strong {
+  color: #003049;
+  font-size: 1.5rem;
+  display: block;
+  margin: 1rem 0;
+}
+
+/* Payment Process Styles */
+.payment-process {
+  padding: 40px 0;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.process-steps {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  padding: 20px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto 3rem;
+}
+
+.process-steps::before {
+  content: '';
+  position: absolute;
+  top: 25px;
+  left: 40px;
+  right: 40px;
+  height: 2px;
+  background: #dee2e6;
+  z-index: 1;
+}
+
+.step {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  flex: 1;
+}
+
+.step-number {
+  width: 50px;
+  height: 50px;
+  background: #007bff;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 15px;
+  font-size: 20px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background: #003049;
+  color: white;
+}
+
+.step h3 {
+  font-size: 1rem;
+  color: #666;
+  margin: 0;
+}
+
+.step.active h3 {
+  color: #003049;
+}
+
+.step-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.plan-summary {
+  background: #f8f9fa;
+  padding: 2rem;
+  border-radius: 10px;
+  margin-bottom: 2rem;
+}
+
+.payment-methods {
+  display: grid;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.payment-option {
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.payment-option:hover {
+  border-color: #003049;
+}
+
+.payment-option input[type="radio"] {
+  display: none;
+}
+
+.payment-option label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.method-name {
+  font-weight: bold;
+  color: #003049;
+}
+
+.method-description {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Trainer profile and contact styles removed */
+
+.proceed-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  text-align: center;
+  background-color: #003049;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.proceed-btn:hover {
+  background-color: #00436a;
+}
+ .form-section {
+  padding: 60px 20px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the start to prevent vertical stretching */
+}
+
+.form-container {
+  background: rgb(175, 185, 168);
+  padding: 2rem;
+  border-radius: 15px;
+  max-width: 400px; /* Ensure a consistent width */
+  width: 100%; /* Make it responsive */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box; /* Include padding in the width */
+}
+
+.form-container h2 {
+  color: #003049;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-container .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-container label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: #2c3e50;
+}
+
+.form-container input[type="text"],
+.form-container input[type="email"],
+.form-container input[type="password"],
+.form-container input[type="tel"] {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+  box-sizing: border-box; /* Include padding in the width */
+}
+
+.form-container input:focus {
+  border-color: #003049;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 48, 73, 0.1);
+}
+
+.form-container .btn {
+  width: 100%;
+  padding: 1rem;
+  font-size: 1.1rem;
+  margin-top: 1rem;
+}
+
+.form-container .form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.form-container .form-footer a {
+  color: #003049;
+  font-weight: 600;
+}
+
+.form-container .form-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Specific styles for password input container to ensure it fits */
+.form-container .password-input-container {
+  width: 100%;
+  position: relative;
+}
+
+.form-container .password-input-container input {
+  padding-right: 40px; /* Space for the toggle icon */
+  box-sizing: border-box;
+}
+
+.form-container .password-input-container .toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #555;
+  font-size: 1.2em;
+}
+
+.form-container .password-input-container .toggle-password:focus {
+  outline: none;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+.form-container h2 {
+  margin-bottom: 25px;
+  color: #003049;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: #264653;
+  font-weight: 500;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-footer {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  
+}
+.forgot-link {
+  text-align: center;
+  margin-top: 8px;
+}
+
+/* Reset some basic styles */
+body, html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: white;
+}
+
+/* Sticky dark navbar */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #242222;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.815);
+}
+
+/* Logo style */
+.logo {
+  height: 90px;
+  box-shadow: 0 2px 5px rgba(6, 104, 96, 0.815);
+
+}
+
+.logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+
+/* Navigation links */
+.nav-links {
+  display: flex;
+  gap: 20px;
+}
+
+.nav-links a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover {
+  color: #00ffcc;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  padding: 20px;
+  background-color: #242222;
+  color: white;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.815);
+}
+
+
+/* Wrapper to force footer down */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Main content takes up all available space */
+main {
+  flex: 1;
+}
+
+/*dashboard new styles */
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f6f9;
+  color: #222;
+}
+
+.dashboard-layout {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* Sidebar old layout*/
+.sidebar {
+  background: linear-gradient(to right, #003049, #264653);
+  color: white;
+  width: 200px; /* normal width */
+  padding: 30px 20px;
+  transition: width 0.3s ease, padding 0.3s ease;
+}
+
+.sidebar:hover {
+  width: 240px; /* slight expansion */
+  padding: 30px 25px;
+}
+
+.sidebar h2 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar ul li {
+  margin-bottom: 20px;
+}
+
+.sidebar ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  display: block;
+}
+
+.sidebar ul li a.active,
+.sidebar ul li a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* Main */
+.dashboard-main {
+  flex-grow: 1;
+  padding: 40px;
+}
+
+.welcome h1 {
+  font-size: 2rem;
+  margin-bottom: 0.3rem;
+}
+
+.membership-summary {
+  background-color: #fff;
+  padding: 20px;
+  margin: 30px 0;
+  border-left: 6px solid #003366;
+}
+
+.info-line {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.attendance-section {
+  margin-top: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+}
+
+.motivation-toggle {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+.card {
+  background-color: #fff7e6;
+  border-radius: 12px;
+  width: 300px;
+  padding: 20px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+#quote-front, #quote-back {
+  font-size: 1.1rem;
+}
+
+#quote-back {
+  display: none;
+}
+
+#quote-front.hide {
+  display: none;
+}
+
+#quote-back.show {
+  display: block;
+}
+ /** BMI CLACULATOR CSS */
+
+.bmi-section {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.bmi-card {
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.bmi-card input, .bmi-card select {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.bmi-card button {
+  background-color: #003366;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#bmi-result {
+  margin-top: 10px;
+  font-weight: bold;
+}
+/*this has the css for finalising dashboard*/
+.faq-section {
+  margin-top: 40px;
+  padding: 20px;
+  background-color: #f4f6f8;
+  border-radius: 8px;
+}
+
+.faq-section h2 {
+  margin-bottom: 20px;
+  color: #003366;
+}
+
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.faq-item {
+  border-bottom: 1px solid #ccc;
+}
+
+.faq-question {
+  background: none;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+  color: #003366;
+}
+
+.faq-answer {
+  padding: 0 10px 10px;
+  display: none;
+  color: #333;
+}
+
+.faq-answer.show {
+  display: block;
+}
+.faq-category {
+  background-color: #eee;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.faq-category-content {
+  display: none;
+  margin-left: 15px;
+}
+
+.faq-category-content.show {
+  display: block;
+}
+
+.faq-answer {
+  display: none;
+  padding: 5px 15px;
+  background-color: #f9f9f9;
+  border-left: 3px solid #003366;
+  margin-bottom: 10px;
+}
+
+.faq-answer.show {
+  display: block;
+}

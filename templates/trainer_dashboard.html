@@ -1,0 +1,808 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .welcome-banner {
+        background: linear-gradient(135deg, #003049, #0056b3);
+        color: white;
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .profile-card {
+        background: linear-gradient(135deg, #003049, #0056b3);
+        color: white;
+        padding: 30px;
+        border-radius: 15px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .profile-card h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+    }
+    .profile-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+    .info-item {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px;
+        border-radius: 8px;
+    }
+    .info-item label {
+        display: block;
+        font-size: 14px;
+        margin-bottom: 5px;
+        opacity: 0.9;
+    }
+    .info-item span {
+        font-size: 16px;
+        font-weight: 500;
+    }
+    .edit-btn {
+        background: white;
+        color: #007bff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+    .edit-btn:hover {
+        background: rgba(255, 255, 255, 0.9);
+        transform: translateY(-2px);
+    }
+</style>
+
+<script src="{{ url_for('static', filename='js/trainer_dashboard.js') }}"></script>
+
+<div class="container">
+    <div class="welcome-banner">
+        <h1>Welcome back, {{ trainer.first_name }}!</h1>
+    </div>
+
+    <div class="profile-card">
+        <h2>My Profile</h2>
+        <div class="profile-info">
+            <div class="info-item">
+                <label>Full Name</label>
+                <span>{{ trainer.first_name }} {{ trainer.last_name }}</span>
+            </div>
+            <div class="info-item">
+                <label>Email</label>
+                <span>{{ trainer.email }}</span>
+            </div>
+            <div class="info-item">
+                <label>Phone</label>
+                <span>{{ trainer.phone }}</span>
+            </div>
+            <div class="info-item">
+                <label>Specialization</label>
+                <span>{{ trainer.specialization }}</span>
+            </div>
+            <div class="info-item">
+                <label>Experience</label>
+                <span>{{ trainer.experience_years }} years</span>
+            </div>
+            <div class="info-item">
+                <label>Certifications</label>
+                <span>{{ trainer.certifications }}</span>
+            </div>
+        </div>
+        <a href="{{ url_for('edit_trainer_profile') }}" class="edit-btn">Edit Profile</a>
+    </div>
+
+    <!-- Notifications Section -->
+    <div class="notifications-panel">
+        <div class="notifications-header" id="notificationsToggle">
+            <a href="{{ url_for('toggle_notifications') }}" class="notifications-toggle-link">
+                <h2>Notifications</h2>
+                {% set unread_count = notifications|selectattr('read', 'equalto', false)|list|length %}
+                {% if unread_count > 0 %}
+                <span class="notification-count">{{ unread_count }}</span>
+                {% endif %}
+                <i class="fas fa-chevron-down" style="margin-left: auto;"></i>
+            </a>
+        </div>
+        <div class="notifications-list{% if session.get('notifications_active') %} active{% endif %}" id="notificationsList">
+            {% if notifications %}
+                {% for notification in notifications %}
+                <div class="notification-item {% if not notification.read %}unread{% endif %}" data-notification-id="{{ notification.id }}" onclick="showNotificationDetails(this)">
+                    <div class="notification-content">
+                        <div class="notification-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="notification-text">
+                            <p>{{ notification.message }}</p>
+                            <span class="notification-time">{{ notification.created_at.strftime('%Y-%m-%d %H:%M:%S') }}</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="no-notifications">
+                    <i class="fas fa-bell-slash"></i>
+                    <p>No notifications</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Notification Details Modal -->
+    <div id="notificationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Notification Details</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <p id="notificationMessage"></p>
+                <span id="notificationTime" class="notification-time"></span>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="markAsReadAndClose()">Mark as Read</button>
+            </div>
+        </div>
+    </div>
+    <style>
+    .notifications-panel {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+    .notifications-header {
+        display: flex;
+        align-items: center;
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+    }
+    .notifications-toggle-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        color: inherit;
+        width: 100%;
+    }
+    .notifications-header h2 {
+        margin: 0;
+        font-size: 20px;
+        color: #333;
+    }
+    .notification-count {
+        background: #ff4444;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        margin-left: 10px;
+    }
+    .notifications-list {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease-out;
+    }
+    .notifications-list.active {
+        max-height: 300px;
+        overflow-y: auto;
+    }
+    .notification-item {
+        padding: 15px 0;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .notification-item:hover {
+        background: #f8f9fa;
+        transform: translateX(5px);
+    }
+    .notification-item:last-child {
+        border-bottom: none;
+    }
+    .notification-content {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+    }
+    .notification-icon {
+        width: 40px;
+        height: 40px;
+        background: #e3f2fd;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #007bff;
+    }
+    .notification-text p {
+        margin: 0 0 5px 0;
+        color: #333;
+    }
+    .notification-time {
+        font-size: 12px;
+        color: #666;
+    }
+    .unread {
+        background: #f0f7ff;
+    }
+    .unread .notification-text p {
+        font-weight: bold;
+        color: #003049;
+    }
+    .no-notifications {
+        text-align: center;
+        padding: 30px 0;
+        color: #666;
+    }
+    .no-notifications i {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 0;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 500px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .modal-header {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-header h3 {
+        margin: 0;
+        color: #333;
+    }
+    .close-modal {
+        color: #aaa;
+        font-size: 28px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    .close-modal:hover {
+        color: #333;
+    }
+    .modal-body {
+        padding: 20px;
+    }
+    .modal-footer {
+        padding: 15px 20px;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+    
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-content {
+        background-color: #fff;
+        margin: 15% auto;
+        padding: 20px;
+        border-radius: 8px;
+        width: 80%;
+        max-width: 500px;
+        position: relative;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+    }
+
+    .modal-header h3 {
+        margin: 0;
+        color: #333;
+    }
+
+    .close-modal {
+        font-size: 24px;
+        font-weight: bold;
+        color: #666;
+        cursor: pointer;
+    }
+
+    .close-modal:hover {
+        color: #333;
+    }
+
+    .modal-body {
+        margin-bottom: 20px;
+    }
+
+    .modal-footer {
+        text-align: right;
+        padding-top: 10px;
+        border-top: 1px solid #eee;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    /* Modal Styles */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+    }
+    .modal-content {
+        background: white;
+        width: 90%;
+        max-width: 500px;
+        margin: 50px auto;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .modal-header {
+        padding: 20px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .modal-header h3 {
+        margin: 0;
+        color: #003049;
+    }
+    .close-modal {
+        font-size: 24px;
+        color: #666;
+        cursor: pointer;
+        transition: color 0.3s ease;
+    }
+    .close-modal:hover {
+        color: #003049;
+    }
+    .modal-body {
+        padding: 20px;
+    }
+    .modal-footer {
+        padding: 20px;
+        border-top: 1px solid #eee;
+        text-align: right;
+    }
+    .btn-primary {
+        background: #003049;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: #002038;
+        transform: translateY(-2px);
+    }
+    </style>
+
+    <!-- Members Management Section -->
+    <div class="members-section">
+        <div class="section-header">
+            <h2>My Members</h2>
+            <div class="filters">
+                <div class="search-box">
+                    <input type="text" class="search-input" placeholder="Search members...">
+                </div>
+                <select class="filter-select">
+                    <option value="all">All Members</option>
+                    <option value="active">Active</option>
+                    <option value="pending">Pending</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="members-grid">
+            {% for member in members %}
+            <div class="member-card" data-member-id="{{ member.user_id }}" data-status="{{ member.status }}">
+                <div class="member-header">
+                    <img src="{{ url_for('static', filename='images/default-profile.jpg.svg') }}" alt="{{ member.first_name }} {{ member.last_name }}" class="member-avatar">
+                    <div class="member-status-badge {{ member.status }}">{{ member.status|title }}</div>
+                </div>
+                <div class="member-info">
+                    <h3>{{ member.first_name }} {{ member.last_name }}</h3>
+                    <div class="member-details">
+                        <span class="member-plan">{{ member.plan_type }}</span>
+                        <span class="member-since">Joined {{ member.join_date }}</span>
+                    </div>
+                </div>
+                <div class="member-actions">
+                    <button class="action-btn chat" onclick="openChat('{{ member.user_id }}', '{{ member.first_name }} {{ member.last_name }}')">
+                        <i class="fas fa-comment"></i>
+                        <span>Chat</span>
+                    </button>
+                    <button class="action-btn progress" onclick="initializeProgress('{{ member.user_id }}', '{{ member.first_name }} {{ member.last_name }}')">
+                        <i class="fas fa-chart-line"></i>
+                        <span>Progress</span>
+                    </button>
+                    <button class="action-btn transfer" onclick="initializeTransfer('{{ member.user_id }}', '{{ member.first_name }} {{ member.last_name }}')">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Transfer</span>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <style>
+    .members-section {
+        margin-top: 30px;
+    }
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .section-header h2 {
+        margin: 0;
+        color: #333;
+    }
+    .filters {
+        display: flex;
+        gap: 15px;
+        align-items: center;
+    }
+    .search-box {
+        position: relative;
+        display: flex;
+        align-items: center;
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 5px 10px;
+        width: 200px;
+    }
+    .search-box i {
+        color: #666;
+        margin-right: 8px;
+    }
+    .search-input {
+        border: none;
+        outline: none;
+        padding: 5px;
+        font-size: 14px;
+        width: 100%;
+    }
+    .filter-select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        font-size: 14px;
+        background-color: white;
+    }
+    .members-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 20px;
+        margin-top: 20px;
+    }
+    .member-card {
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+    }
+    .member-card:hover {
+        transform: translateY(-5px);
+    }
+    .member-header {
+        position: relative;
+        padding: 20px;
+        background: linear-gradient(135deg, #f5f7fa 0%, #003049 100%);
+        text-align: center;
+    }
+    .member-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .member-status-badge {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+    .member-status-badge.active {
+        background: #28a745;
+        color: white;
+    }
+    .member-status-badge.pending {
+        background: #ffc107;
+        color: #000;
+    }
+    .member-info {
+        padding: 20px;
+        text-align: center;
+    }
+    .member-info h3 {
+        margin: 0 0 10px 0;
+        color: #333;
+    }
+    .member-details {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        font-size: 14px;
+        color: #666;
+    }
+    .member-actions {
+        display: flex;
+        justify-content: space-around;
+        padding: 15px;
+        background: #f8f9fa;
+        border-top: 1px solid #eee;
+    }
+    .action-btn {
+        background: none;
+        border: none;
+        padding: 8px;
+        color: #666;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 5px;
+        transition: color 0.3s ease;
+    }
+    .action-btn:hover {
+        color: #007bff;
+    }
+    .action-btn i {
+        font-size: 18px;
+    }
+    .action-btn span {
+        font-size: 12px;
+    }
+    </style>
+
+    <!-- Chat Modal -->
+    <div id="chatModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Chat with <span id="chatMemberName"></span></h4>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="chat-messages">
+                <!-- Messages will be loaded here -->
+            </div>
+            <div class="chat-input">
+                <input type="text" placeholder="Type your message...">
+                <button class="send-message">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transfer Modal -->
+    <div id="transferModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Transfer Member</h4>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="transfer-form">
+                <p>Select a trainer to transfer <span id="transferMemberName"></span> to:</p>
+                <select id="trainerSelect">
+                    {% for trainer in available_trainers %}
+                    <option value="{{ trainer.id }}">{{ trainer.name }} - {{ trainer.specialization }}</option>
+                    {% endfor %}
+                </select>
+                <div class="transfer-actions">
+                    <button class="cancel-transfer">Cancel</button>
+                    <button class="confirm-transfer">Confirm Transfer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress Modal -->
+    <div id="progressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Member Progress - <span id="progressMemberName"></span></h4>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="progress-content">
+                <div class="progress-metrics">
+                    <div class="metric">
+                        <h5>Attendance Rate</h5>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 75%;">75%</div>
+                        </div>
+                    </div>
+                    <div class="metric">
+                        <h5>Goals Achieved</h5>
+                        <div class="progress-bar">
+                            <div class="progress" style="width: 60%;">60%</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-notes">
+                    <h5>Progress Notes</h5>
+                    <textarea placeholder="Add progress notes..."></textarea>
+                    <button class="save-progress">Save Progress</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member Details Modal -->
+    <div id="memberDetailsModal" class="modal member-details-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>Member Details</h4>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="member-details-content">
+                <div class="member-profile-header">
+                    <div class="member-profile-image">
+                        <img src="" alt="Member Profile" id="memberDetailImage">
+                    </div>
+                    <div class="member-profile-info">
+                        <h3 id="memberDetailName"></h3>
+                        <p class="member-detail-plan" id="memberDetailPlan"></p>
+                        <span class="member-detail-status" id="memberDetailStatus"></span>
+                    </div>
+                </div>
+                <div class="member-stats-grid">
+                    <div class="stat-card">
+                        <h5>Height</h5>
+                        <p id="memberDetailHeight"></p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>Weight</h5>
+                        <p id="memberDetailWeight"></p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>BMI</h5>
+                        <p id="memberDetailBMI"></p>
+                    </div>
+                    <div class="stat-card">
+                        <h5>Age</h5>
+                        <p id="memberDetailAge"></p>
+                    </div>
+                </div>
+                <div class="member-detail-section">
+                    <h5>Health Conditions</h5>
+                    <p id="memberDetailHealth"></p>
+                </div>
+                <div class="member-detail-section">
+                    <h5>Current Goals</h5>
+                    <ul id="memberDetailGoals"></ul>
+                </div>
+                <div class="member-detail-section">
+                    <h5>Workout Plan</h5>
+                    <div id="memberDetailWorkout"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Profile Modal -->
+<div id="editProfileModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4>Edit Profile</h4>
+            <button class="close-modal">&times;</button>
+        </div>
+        <div class="edit-profile-form">
+            <div class="form-group">
+                <label for="editFirstName">First Name</label>
+                <input type="text" id="editFirstName" value="{{ trainer.first_name }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editLastName">Last Name</label>
+                <input type="text" id="editLastName" value="{{ trainer.last_name }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input type="email" id="editEmail" value="{{ trainer.email }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editPhone">Phone</label>
+                <input type="tel" id="editPhone" value="{{ trainer.phone }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editSpecialization">Specialization</label>
+                <input type="text" id="editSpecialization" value="{{ trainer.specialization }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editExperience">Years of Experience</label>
+                <input type="number" id="editExperience" value="{{ trainer.experience_years }}" class="form-control">
+            </div>
+            <div class="form-group">
+                <label for="editCertifications">Certifications</label>
+                <textarea id="editCertifications" class="form-control">{{ trainer.certifications }}</textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeEditProfileModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProfileChanges()">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Set current user ID for chat functionality
+    const currentUserId = "{{ session.user_id }}";
+</script>
+<script src="{{ url_for('static', filename='js/trainer_dashboard.js') }}"></script>
+{% endblock %}

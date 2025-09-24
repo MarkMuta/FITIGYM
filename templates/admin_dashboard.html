@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 1200px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    .dashboard-sections {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    .section-card {
+        background-color: #e9e9e9;
+        padding: 20px;
+        border-radius: 8px;
+        width: 300px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+    .section-card h2 {
+        color: #555;
+        margin-top: 0;
+    }
+    .section-card p {
+        color: #777;
+        font-size: 0.9em;
+    }
+    .section-card a {
+        display: inline-block;
+        background-color: #007bff;
+        color: #fff;
+        padding: 10px 15px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin-top: 10px;
+    }
+    .section-card a:hover {
+        background-color: #0056b3;
+    }
+</style>
+<div class="container">
+    <h1>Admin Dashboard</h1>
+    <div class="dashboard-sections">
+        <div class="section-card">
+            <h2>Manage Users</h2>
+            <p>View, edit, and delete user accounts.</p>
+            <a href="{{ url_for('manage_users') }}">Go to Users</a>
+        </div>
+        <div class="section-card">
+            <h2>Manage Trainers</h2>
+            <p>View , delete and update trainers .</p>
+            <a href="{{ url_for('manage_trainers') }}">Go to Trainers</a>
+        </div>
+        <div class="section-card">
+            <h2>Manage Plans</h2>
+            <p>Create, update, or remove membership plans.</p>
+            <a href="{{ url_for('manage_plans') }}">Go to Plans</a>
+        </div>
+        <div class="section-card">
+            <h2>View Reports</h2>
+            <p>Access various site reports and analytics.</p>
+            <a href="{{ url_for('reports') }}">Go to Reports</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

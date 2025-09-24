@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit Profile</h1>
+    <form method="POST">
+        <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ trainer.first_name }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ trainer.last_name }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ trainer.email }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{{ trainer.phone }}" maxlength="10" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="specialization">Specialization:</label>
+            <input type="text" id="specialization" name="specialization" value="{{ trainer.specialization }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="experience_years">Experience (Years):</label>
+            <input type="number" id="experience_years" name="experience_years" value="{{ trainer.experience_years }}" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="certifications">Certifications:</label>
+            <input type="text" id="certifications" name="certifications" value="{{ trainer.certifications | default('') }}" class="form-control" placeholder="e.g., NASM-CPT, ACE">
+        </div>
+        <div class="form-actions mt-4">
+            <button type="submit" class="btn btn-primary">Update Profile</button>
+            <a href="{{ url_for('trainer_dashboard') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .container {
+        max-width: 800px;
+        margin: 30px auto;
+        background-color: #fff;
+        padding: 30px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        color: #333;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .form-group {
+        margin-bottom: 20px;
+    }
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #555;
+        font-weight: 500;
+    }
+    .form-control {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+        box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+    }
+    .form-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+    .btn {
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .btn-primary {
+        background: #007bff;
+        color: white;
+        border: none;
+    }
+    .btn-primary:hover {
+        background: #0056b3;
+    }
+    .btn-secondary {
+        background: #6c757d;
+        color: white;
+        border: none;
+        text-decoration: none;
+    }
+    .btn-secondary:hover {
+        background: #545b62;
+    }
+</style>
+{% endblock %}

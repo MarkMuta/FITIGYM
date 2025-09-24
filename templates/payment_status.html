@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1>M-Pesa Payment Status</h1>
+    <p>Your M-Pesa STK Push request has been sent. Please check your phone to complete the payment.</p>
+    <p>You will receive a confirmation message shortly.</p>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-primary">Go to Dashboard</a>
+</div>
+{% endblock %}

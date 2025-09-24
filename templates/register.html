@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="form-section">
+    <div class="form-container">
+        <h2>Registration</h2>
+        <!-- User type selection removed, defaulting to member -->
+
+        <form method="POST" action="/register" onsubmit="return validatePasswordMatch()">
+            <input type="hidden" id="user_type" name="user_type" value="member">
+            
+            <div class="form-group">
+                <label for="first_name">First Name</label>
+                <input type="text" id="first_name" name="first_name" required>
+            </div>
+            <div class="form-group">
+                <label for="last_name">Last Name</label>
+                <input type="text" id="last_name" name="last_name" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" maxlength="10" pattern="\d{10}" required placeholder="Enter 10-digit phone number">
+            </div>
+            <div class="form-group">
+                <label for="password">Create Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="password" name="password" required maxlength="12" pattern=".{8,12}" placeholder="8-12 characters">
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('password', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <div class="password-input-container">
+                    <input type="password" id="confirm_password" name="confirm_password" required maxlength="12" placeholder="Re-enter password">
+                    <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm_password', event)">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+
+
+
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <p class="form-footer">Already have an account? <a href="/login">Login here</a>.</p>
+    </div>
+</section>
+
+<style>
+    .password-input-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-input-container input[type="password"],
+    .password-input-container input[type="text"] {
+        padding-right: 40px; /* Make space for the icon */
+    }
+
+    .password-input-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #555555;
+        font-size: 1.2em;
+    }
+
+    .password-input-container .toggle-password:focus {
+        outline: none;
+    }
+</style>
+
+<script>
+function togglePasswordVisibility(inputId, event) {
+    const input = document.getElementById(inputId);
+    const icon = event.currentTarget.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+function validatePasswordMatch() {
+    const password = document.getElementById('password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    if (password !== confirmPassword) {
+        alert('Passwords do not match!');
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}

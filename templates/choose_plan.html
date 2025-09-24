@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="plans">
+    <div class="container">
+        <h1>Choose Your Plan</h1>
+
+        <div class="plan-form">
+            <form method="POST" action="/choose_plan">
+                <div class="form-group height-group">
+                    <h3>Your Height</h3>
+                    <div class="height-inputs">
+                        <div class="feet-input">
+                            <label for="height_feet">Feet</label>
+                            <input type="number" id="height_feet" name="height_feet" min="4" max="8" required>
+                        </div>
+                        <div class="inches-input">
+                            <label for="height_inches">Inches</label>
+                            <input type="number" id="height_inches" name="height_inches" min="0" max="11" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">Weight (kg)</label>
+                    <input type="number" id="weight" name="weight" min="30" max="200" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="age">Age</label>
+                    <input type="number" id="age" name="age" min="16" max="80" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="goal">Your Fitness Goal</label>
+                    <select id="goal" name="goal" required>
+                        <option value="">Select your goal</option>
+                        <option value="weight_loss">Weight Loss</option>
+                        <option value="muscle_gain">Muscle Gain</option>
+                        <option value="endurance">Improve Endurance</option>
+                        <option value="flexibility">Increase Flexibility</option>
+                        <option value="general_fitness">General Fitness</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Fitness Experience Level</label>
+                    <select id="experience" name="experience" required>
+                        <option value="">Select your experience level</option>
+                        <option value="beginner">Beginner</option>
+                        <option value="intermediate">Intermediate</option>
+                        <option value="advanced">Advanced</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="preferred_time">Preferred Workout Time</label>
+                    <select id="preferred_time" name="preferred_time" required>
+                        <option value="">Select preferred time</option>
+                        <option value="morning">Morning (6 AM - 10 AM)</option>
+                        <option value="afternoon">Afternoon (11 AM - 3 PM)</option>
+                        <option value="evening">Evening (4 PM - 8 PM)</option>
+                        <option value="night">Night (9 PM - 11 PM)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>Health Conditions (if any)</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="health_conditions[]" value="back_pain">
+                            Back Pain
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="health_conditions[]" value="joint_pain">
+                            Joint Pain
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="health_conditions[]" value="heart_condition">
+                            Heart Condition
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="health_conditions[]" value="diabetes">
+                            Diabetes
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="health_conditions[]" value="asthma">
+                            Asthma
+                        </label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn">Get Personalized Plan</button>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock %}

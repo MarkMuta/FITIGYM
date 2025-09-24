@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Edit User</h1>
+    <form method="POST" onsubmit="return validatePasswordMatch()">
+        <div class="form-group">
+            <label for="first_name">First Name:</label>
+            <input type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="last_name">Last Name:</label>
+            <input type="text" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" value="{{ user.email }}" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone:</label>
+            <input type="text" id="phone" name="phone" value="{{ user.phone }}" maxlength="10" required>
+        </div>
+        <div class="form-group">
+            <label for="user_type">User Type:</label>
+            <select id="user_type" name="user_type">
+                <option value="member" {% if user.user_type == 'member' %}selected{% endif %}>Member</option>
+                <option value="trainer" {% if user.user_type == 'trainer' %}selected{% endif %}>Trainer</option>
+                <option value="admin" {% if user.user_type == 'admin' %}selected{% endif %}>Admin</option>
+            </select>
+        </div>
+        <hr>
+        <h3>Change Password</h3>
+        <p class="text-muted">Leave blank if no password change is needed</p>
+        <div class="form-group">
+            <label for="new_password">New Password:</label>
+            <div class="password-input-container">
+                <input type="password" id="new_password" name="new_password" maxlength="12" pattern=".{8,12}" placeholder="8-12 characters">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('new_password', event)">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password:</label>
+            <div class="password-input-container">
+                <input type="password" id="confirm_password" name="confirm_password" maxlength="12" placeholder="Re-enter password">
+                <button type="button" class="toggle-password" onclick="togglePasswordVisibility('confirm_password', event)">
+                    <i class="fas fa-eye"></i>
+                </button>
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Update User</button>
+        <a href="{{ url_for('manage_users') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+
+<style>
+    .password-input-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .password-input-container input[type="password"],
+    .password-input-container input[type="text"] {
+        padding-right: 40px;
+        width: 100%;
+    }
+
+    .password-input-container .toggle-password {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: #555555;
+    }
+
+    .password-input-container .toggle-password:focus {
+        outline: none;
+    }
+</style>
+
+<script>
+function togglePasswordVisibility(inputId, event) {
+    const input = document.getElementById(inputId);
+    const icon = event.currentTarget.querySelector('i');
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+function validatePasswordMatch() {
+    const newPassword = document.getElementById('new_password').value;
+    const confirmPassword = document.getElementById('confirm_password').value;
+    
+    // If both fields are empty, no password change is needed
+    if (newPassword === '' && confirmPassword === '') {
+        return true;
+    }
+    
+    // If only one field is filled, both should be filled
+    if ((newPassword === '' && confirmPassword !== '') || (newPassword !== '' && confirmPassword === '')) {
+        alert('Please fill both password fields or leave both empty.');
+        return false;
+    }
+    
+    // Check if passwords match
+    if (newPassword !== confirmPassword) {
+        alert('Passwords do not match!');
+        return false;
+    }
+    
+    return true;
+}
+</script>
+{% endblock %}

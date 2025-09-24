@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitiGym | Member Progress</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .progress-container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .member-info {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-card h3 {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #343a40;
+        }
+
+        .chart-container {
+            margin: 2rem 0;
+            padding: 1rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .progress-form {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #495057;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+        }
+
+        .history-section {
+            margin-top: 2rem;
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .history-table th,
+        .history-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .history-table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <a href="/" class="logo-link">
+                <img src="{{ url_for('static', filename='images/logo.png') }}" alt="FitiGym Logo" class="logo">
+            </a>
+            <div class="nav-links">
+                <a href="/">Home</a>
+                {% if user_type == 'trainer' %}
+                <a href="/trainer-dashboard">Dashboard</a>
+                {% else %}
+                <a href="/dashboard">Dashboard</a>
+                {% endif %}
+                <a href="/logout" class="btn-logout">Logout</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="progress-container">
+        <div class="member-info">
+            <h2>{{ member.first_name }} {{ member.last_name }}'s Progress</h2>
+            <p>Goal: {{ member.goal }}</p>
+            <p>Fitness Level: {{ member.fitness_level }}</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Current Weight</h3>
+                <div class="value">{{ progress_history[0].weight if progress_history else 'N/A' }} kg</div>
+            </div>
+            <div class="stat-card">
+                <h3>Body Fat</h3>
+                <div class="value">{{ progress_history[0].body_fat if progress_history else 'N/A' }}%</div>
+            </div>
+            <div class="stat-card">
+                <h3>Muscle Mass</h3>
+                <div class="value">{{ progress_history[0].muscle_mass if progress_history else 'N/A' }} kg</div>
+            </div>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="progressChart"></canvas>
+        </div>
+
+        {% if user_type == 'trainer' %}
+        <div class="progress-form">
+            <h3>Update Progress</h3>
+            <form method="POST">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" step="0.1" id="weight" name="weight" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="body_fat">Body Fat (%)</label>
+                        <input type="number" step="0.1" id="body_fat" name="body_fat" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="muscle_mass">Muscle Mass (kg)</label>
+                        <input type="number" step="0.1" id="muscle_mass" name="muscle_mass" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <textarea id="notes" name="notes" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Update Progress</button>
+            </form>
+        </div>
+        {% endif %}
+
+        <div class="history-section">
+            <h3>Progress History</h3>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Weight (kg)</th>
+                        <th>Body Fat (%)</th>
+                        <th>Muscle Mass (kg)</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in progress_history %}
+                    <tr>
+                        <td>{{ entry.update_date.strftime('%Y-%m-%d') }}</td>
+                        <td>{{ entry.weight }}</td>
+                        <td>{{ entry.body_fat }}</td>
+                        <td>{{ entry.muscle_mass }}</td>
+                        <td>{{ entry.notes }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Prepare data for the chart
+        const progressData = {
+            labels: {{ progress_history|map(attribute='update_date')|map('strftime', '%Y-%m-%d')|list|tojson }}.reverse(),
+            datasets: [
+                {
+                    label: 'Weight (kg)',
+                    data: {{ progress_history|map(attribute='weight')|list|tojson }}.reverse(),
+                    borderColor: '#007bff',
+                    fill: false
+                },
+                {
+                    label: 'Body Fat (%)',
+                    data: {{ progress_history|map(attribute='body_fat')|list|tojson }}.reverse(),
+                    borderColor: '#dc3545',
+                    fill: false
+                },
+                {
+                    label: 'Muscle Mass (kg)',
+                    data: {{ progress_history|map(attribute='muscle_mass')|list|tojson }}.reverse(),
+                    borderColor: '#28a745',
+                    fill: false
+                }
+            ]
+        };
+
+        // Create the chart
+        const ctx = document.getElementById('progressChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: progressData,
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        display: true,
+                        title: {
+                            display: true,
+                            text: 'Value'
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

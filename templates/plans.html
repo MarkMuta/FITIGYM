@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="plans">
+  <div class="container">
+    <a href="/" class="btn btn-secondary" style="margin-bottom: 20px;">Go Back</a>
+        <h1>Membership Plans</h1>
+        <p class="section-description">Choose the perfect membership plan for your fitness journey</p>
+
+    <form action="/choose_plan" method="POST" class="plan-form">
+      <div class="form-group height-group">
+        <h3>Your Height</h3>
+        <div class="height-inputs">
+          <div class="feet-input">
+            <label for="height_feet">Feet:</label>
+            <input type="number" id="height_feet" name="height_feet" min="4" max="8" placeholder="e.g. 5" required>
+            <span class="unit">ft</span>
+          </div>
+          <div class="inches-input">
+            <label for="height_inches">Inches:</label>
+            <input type="number" id="height_inches" name="height_inches" min="0" max="11" placeholder="e.g. 8" required>
+            <span class="unit">in</span>
+          </div>
+        </div>
+        <div class="height-help">Please enter your height in feet and inches</div>
+      </div>
+
+      <div class="form-group">
+        <label for="weight">Your Weight (kg):</label>
+        <input type="number" id="weight" name="weight" step="0.1" placeholder="e.g. 70" required>
+      </div>
+
+      <div class="form-group">
+        <label for="age">Your Age:</label>
+        <input type="number" id="age" name="age" placeholder="e.g. 25" required>
+      </div>
+
+      <div class="form-group">
+        <label for="goal">Your Fitness Goal:</label>
+        <select id="goal" name="goal" required>
+          <option value="">--Select Goal--</option>
+          <option value="muscle_gain">Build Muscle & Strength</option>
+          <option value="fat_loss">Weight Loss & Toning</option>
+          <option value="general_fitness">Overall Fitness & Health</option>
+          <option value="recovery">Rehabilitation & Recovery</option>
+          <option value="endurance">Endurance & Stamina</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="experience">Fitness Experience:</label>
+        <select id="experience" name="experience" required>
+          <option value="">--Select Level--</option>
+          <option value="beginner">Beginner (0-6 months)</option>
+          <option value="intermediate">Intermediate (6-18 months)</option>
+          <option value="advanced">Advanced (18+ months)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="preferred_time">Preferred Workout Time:</label>
+        <select id="preferred_time" name="preferred_time" required>
+          <option value="">--Select Time Slot--</option>
+          <option value="early_morning">Early Bird (5:00 AM - 7:00 AM)</option>
+          <option value="morning">Morning (7:00 AM - 11:00 AM)</option>
+          <option value="afternoon">Afternoon (11:00 AM - 4:00 PM)</option>
+          <option value="evening">Evening (4:00 PM - 9:00 PM)</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="health_conditions">Health Conditions (if any):</label>
+        <textarea id="health_conditions" name="health_conditions" rows="3" placeholder="Please list any health conditions or injuries we should be aware of..."></textarea>
+      </div>
+
+      <button type="submit" class="btn suggest-btn">Get Personalized Plan</button>
+    </form>
+
+    {% if suggestion %}
+      <div class="suggestion-box">
+        <h2>Your Personalized Recommendation</h2>
+        <div class="recommendation-details">
+          <p><strong>Recommended Plan:</strong> {{ suggestion.plan }}</p>
+          <p><strong>BMI:</strong> {{ suggestion.bmi }} ({{ suggestion.bmi_category }})</p>
+          <p><strong>Suggested Trainer:</strong> {{ suggestion.trainer }}</p>
+          <p><strong>Workout Focus:</strong> {{ suggestion.workout_focus }}</p>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="plans-grid">
+      {% for plan_key, plan in plans.items() %}
+      <div class="plan-card {{ plan_key }}">
+        {% if loop.first %}
+          <div class="plan-badge">Flexible</div>
+        {% elif loop.index == 3 %}
+          <div class="plan-badge">Popular</div>
+        {% elif loop.last and loop.index > 3 %}
+          <div class="plan-badge">Best Value</div>
+        {% endif %}
+        
+        <h2>{{ plan.name }}</h2>
+        <p>
+          {% if plan.duration_days == 1 %}
+            Perfect for occasional gym-goers
+          {% elif loop.index == 2 %}
+            Essential fitness package
+          {% elif loop.index == 3 %}
+            Enhanced fitness experience
+          {% else %}
+            Ultimate fitness transformation
+          {% endif %}
+        </p>
+        
+        <ul class="plan-features">
+          {% for feature in plan.features %}
+            <li>✓ {{ feature }}</li>
+          {% endfor %}
+        </ul>
+        
+        <p><strong>{{ plan.price }}</strong></p>
+        
+        {% if is_logged_in %}
+          <a href="/payment-process/{{ plan.id }}" class="btn">
+            {% if plan.duration_days == 1 %}
+              Get Day Pass
+            {% else %}
+              Choose {{ plan.name.split()[0] }}
+            {% endif %}
+          </a>
+        {% else %}
+          <a href="/login" class="btn" onclick="alert('Please log in to subscribe to a plan')">
+            {% if plan.duration_days == 1 %}
+              Get Day Pass
+            {% else %}
+              Choose {{ plan.name.split()[0] }}
+            {% endif %}
+          </a>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+  </div>
+</section>
+{% endblock %}

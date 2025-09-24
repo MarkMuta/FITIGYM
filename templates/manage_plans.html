@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+    .container {
+        max-width: 900px;
+        margin: 20px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #f2f2f2;
+    }
+    .action-buttons a {
+        margin-right: 5px;
+        padding: 6px 12px;
+        border-radius: 4px;
+        text-decoration: none;
+        color: #fff;
+        display: inline-block;
+    }
+    .action-buttons .edit-btn {
+        background-color: #007bff;
+    }
+    .action-buttons .edit-btn:hover {
+        background-color: #0056b3;
+    }
+    .action-buttons .delete-btn {
+        background-color: #dc3545;
+        padding: 5px 10px;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+        border: none; /* Ensure no default button border */
+        cursor: pointer;
+    }
+    .action-buttons .delete-btn:hover {
+        background-color: #c82333;
+    }
+    .add-button {
+        display: inline-block;
+        background-color: #28a745;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 4px;
+        text-decoration: none;
+        margin: 20px 0;
+        font-weight: 500;
+    }
+    .add-button:hover {
+        background-color: #218838;
+        color: #fff;
+        text-decoration: none;
+    }
+    .description-cell {
+        max-width: 300px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+    .price-cell {
+        white-space: nowrap;
+    }
+    .duration-cell {
+        white-space: nowrap;
+    }
+    .flash-messages {
+        margin-bottom: 20px;
+    }
+    .flash-message {
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-bottom: 10px;
+    }
+    .flash-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+    .flash-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+</style>
+
+<div class="container">
+    <h1>Manage Plans</h1>
+    
+    <a href="{{ url_for('admin_dashboard') }}" class="btn btn-secondary">Back to Dashboard</a>
+    <a href="{{ url_for('add_plan') }}" class="add-button">Add New Plan</a>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-messages">
+            {% for category, message in messages %}
+            <div class="flash-message flash-{{ category }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    {% endwith %}
+
+    <table>
+        <thead>
+            <tr>
+                <th>Plan Name</th>
+                <th>Price (KES)</th>
+                <th>Description</th>
+                <th>Duration (Days)</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for plan in plans %}
+            <tr>
+                <td>{{ plan.name }}</td>
+                <td class="price-cell">KES {{ plan.formatted_price }}</td>
+                <td class="description-cell">{{ plan.description }}</td>
+                <td class="duration-cell">{{ plan.duration_days }}</td>
+                <td class="action-buttons">
+                    <a href="{{ url_for('edit_plan', plan_id=plan.id) }}" class="edit-btn">Edit</a>
+                    <form method="POST" action="{{ url_for('delete_plan', plan_id=plan.id) }}" style="display: inline;">
+                        <button type="submit" class="delete-btn" onclick="return confirm('Are you sure you want to delete this plan?');">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

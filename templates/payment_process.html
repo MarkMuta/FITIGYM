@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<section class="payment-process">
+  <div class="container">
+    <div class="process-steps">
+      <div class="step {% if step == 1 %}active{% endif %}">
+        <div class="step-number">1</div>
+        <h3>Review Your Plan</h3>
+      </div>
+      <div class="step {% if step == 2 %}active{% endif %}">
+        <div class="step-number">2</div>
+        <h3>Choose Payment Method</h3>
+      </div>
+      <div class="step {% if step == 3 %}active{% endif %}">
+        <div class="step-number">3</div>
+        <h3>Finalize Payment</h3>
+      </div>
+    </div>
+
+    {% if step == 1 %}
+    <div class="step-content">
+      <a href="{{ url_for('plans') }}" class="btn btn-secondary" style="margin-bottom: 20px;">Go Back</a>
+      <h2>Review Your Selected Plan</h2>
+      <div class="plan-summary">
+        <h3>{{ plan.name }}</h3>
+        <p class="price">{{ plan.price }}</p>
+        <ul class="plan-features">
+          {% for feature in plan.features %}
+          <li>✓ {{ feature }}</li>
+          {% endfor %}
+        </ul>
+        <div class="user-details">
+          <h4>Your Profile Summary</h4>
+          <p><strong>Height:</strong> {{ user_data.height_feet }}' {{ user_data.height_inches }}"</p>
+          <p><strong>Weight:</strong> {{ user_data.weight }} kg</p>
+          <p><strong>Age:</strong> {{ user_data.age }} years</p>
+          <p><strong>BMI:</strong> {{ user_data.bmi }} ({{ user_data.bmi_category }})</p>
+          <p><strong>Fitness Goal:</strong> {{ user_data.goal }}</p>
+          <p><strong>Experience Level:</strong> {{ user_data.experience }}</p>
+          <p><strong>Preferred Time:</strong> {{ user_data.preferred_time }}</p>
+          {% if user_data.health_conditions %}
+          <p><strong>Health Conditions:</strong> {{ user_data.health_conditions|join(', ') }}</p>
+          {% endif %}
+        </div>
+      </div>
+      <a href="{{ url_for('payment_process_view', plan_id=plan.id, step=2) }}" class="btn proceed-btn">Proceed to Payment</a>
+    </div>
+    {% endif %}
+
+    {% if step == 2 %}
+    <div class="step-content">
+      <a href="{{ url_for('payment_process_view', plan_id=plan.id, step=1) }}" class="btn btn-secondary" style="margin-bottom: 20px;">Go Back</a>
+      <h2>Choose Your Payment Method</h2>
+      <div class="payment-methods">
+        <div class="payment-option">
+          <input type="radio" name="payment_method" id="mpesa" value="mpesa" checked>
+          <label for="mpesa">
+            <span class="method-name">M-PESA</span>
+            <span class="method-description">Pay using M-PESA mobile money</span>
+          </label>
+        </div>
+
+      </div>
+      <a href="{{ url_for('mpesa_payment', plan_id=plan.id) }}" class="btn proceed-btn">Complete Payment</a>
+    </div>
+    {% endif %}
+
+    
+  </div>
+</section>
+{% endblock %}

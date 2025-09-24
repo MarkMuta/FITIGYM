@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <a href="{{ url_for('payment_process_view', plan_id=plan.id, step=2) }}" class="btn btn-secondary mb-3">← Go Back</a>
+
+    <h2>M-Pesa Payment for {{ plan.name }}</h2>
+    <p><strong>Amount:</strong> KES {{ plan.price }}</p>
+
+    <form action="{{ url_for('mpesa_payment', plan_id=plan.id) }}" method="POST">
+        <div class="form-group">
+            <label for="phone_number">M-Pesa Mobile Number:</label>
+            <input type="text" id="phone_number" name="phone_number" class="form-control"
+                   placeholder="e.g., 254712345678" required>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Confirm and Pay</button>
+    </form>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="mt-4">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+</div>
+{% endblock %}

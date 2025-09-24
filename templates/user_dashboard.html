@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FitiGym | Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <header>
+    <nav class="navbar">
+      <a href="/" class="logo-link">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="FitiGym Logo" class="logo">
+      </a>
+
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/plans">Plans</a>
+        <a href="/logout">Log Out</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="dashboard-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <ul>
+        <li><a href="/dashboard" class="active">Dashboard</a></li>
+        <li><a href="/checkin">Check In</a></li>
+        <li><a href="/attendance">Attendance</a></li>
+        <li><a href="/profile">Profile</a></li>
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+      <section class="welcome">
+        <h1>Welcome back, {{ user_name }} 👋</h1>
+        <p>Your fitness stats and activity summary</p>
+      </section>
+
+      <section class="membership-summary">
+        <h2>Membership Details</h2>
+        <div class="info-line">
+          <p><strong>Plan:</strong> {{ plan_name }}</p>
+          <p><strong>Subscribed on:</strong> {{ start_date }}</p>
+          <p><strong>Expires:</strong> {{ end_date }}</p>
+        </div>
+      </section>
+
+      <section class="attendance-section">
+        <h2>Monthly Attendance</h2>
+        <canvas id="attendanceChart" width="400" height="150"></canvas>
+      </section>
+
+      <section class="bmi-section">
+        <h2>💡 Check Your BMI</h2>
+        <div class="bmi-form">
+          <label for="weight">Weight (kg):</label>
+          <input type="number" id="weight" placeholder="e.g. 73">
+
+          <label for="heightType">Height Unit:</label>
+          <select id="heightType">
+            <option value="cm">Centimeters</option>
+            <option value="ft">Feet & Inches</option>
+          </select>
+
+          <div id="heightCmInput">
+            <label for="heightCm">Height (cm):</label>
+            <input type="number" id="heightCm" placeholder="e.g. 180">
+          </div>
+
+          <div id="heightFtInput" style="display: none;">
+            <label for="heightFt">Height (feet):</label>
+            <input type="number" id="heightFt" placeholder="e.g. 5">
+            <label for="heightIn">(inches):</label>
+            <input type="number" id="heightIn" placeholder="e.g. 11">
+          </div>
+
+          <button onclick="calculateBMI()">Calculate BMI</button>
+          <div id="bmiResult"></div>
+        </div>
+      </section>
+
+      <section class="motivation-toggle">
+        <div class="card" onclick="toggleQuote()">
+          <div id="quote-front">🎯 Tap for Motivation</div>
+          <div id="quote-back">"No pain, no gain. Shut up and train."</div>
+        </div>
+      </section>
+
+      <!-- Replace your <section class="faq-section">...</section> block with the following: -->
+
+<section class="faq-section">
+  <h2>Frequently Asked Questions</h2>
+  <div class="faq-container">
+
+    <!-- Category -->
+    <div class="faq-category-item">
+      <button class="faq-category">🏋️‍♂️ Gym Usage & Access</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">What are the gym's opening and closing hours?</button>
+          <div class="faq-answer"><p>Our gym is open Monday to Saturday from 5:00 AM to 9:00 PM. Closed on Sundays.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I check in more than once a day?</button>
+          <div class="faq-answer"><p>Yes, each check-in is recorded separately in your attendance history.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What should I bring when I come to the gym?</button>
+          <div class="faq-answer"><p>Towel, workout clothes, water bottle, shoes. Follow any trainer-specific instructions.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Do you offer personal training sessions?</button>
+          <div class="faq-answer"><p>Yes. Included in certain plans or available as add-ons under "Plans."</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Are there lockers or changing rooms?</button>
+          <div class="faq-answer"><p>Yes, secure and clean lockers/changing rooms are provided to active members.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Health & BMI -->
+    <div class="faq-category-item">
+      <button class="faq-category">⚖️ Health & BMI</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">How is my BMI calculated?</button>
+          <div class="faq-answer"><p>Based on your height and weight. Try the BMI calculator above to get your result.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How is my BMI used in this system?</button>
+          <div class="faq-answer"><p>It helps suggest fitness plans and assign suitable trainers based on your goals.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Membership & Payments -->
+    <div class="faq-category-item">
+      <button class="faq-category">💳 Membership & Payments</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">How do I subscribe to a membership plan?</button>
+          <div class="faq-answer"><p>Go to "Plans" after registration to choose a plan that fits your fitness goals.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I upgrade or downgrade my plan later?</button>
+          <div class="faq-answer"><p>Yes, and changes take effect at the end of your current billing cycle.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What happens if my membership expires?</button>
+          <div class="faq-answer"><p>Access is limited until you renew your plan.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Is there a refund policy?</button>
+          <div class="faq-answer"><p>We currently don’t offer refunds for unused portions. Choose your plan carefully.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How do I view my plan details?</button>
+          <div class="faq-answer"><p>Details are visible in the "Membership Details" section of your dashboard.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Account & Dashboard -->
+    <div class="faq-category-item">
+      <button class="faq-category">💡 Account & Dashboard</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">How can I update my profile?</button>
+          <div class="faq-answer"><p>Visit the "Profile" page to change your info and fitness goals.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What do I do if I forget my password?</button>
+          <div class="faq-answer"><p>Click “Forgot Password” on the login page and follow email instructions.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I track my gym attendance?</button>
+          <div class="faq-answer"><p>Yes, it's shown as a chart in the “Monthly Attendance” section.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How do I contact my assigned trainer?</button>
+          <div class="faq-answer"><p>Trainer contact info appears on your dashboard once assigned.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Trainers -->
+    <div class="faq-category-item">
+      <button class="faq-category">🧍‍♂️ Trainers & Scheduling</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">Can I choose my preferred trainer?</button>
+          <div class="faq-answer"><p>You can request one. We match based on goals and availability.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How is a trainer assigned?</button>
+          <div class="faq-answer"><p>We assign based on your selected plan and preferred time slot.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Can I change my workout schedule?</button>
+          <div class="faq-answer"><p>Yes, update your time slot in your profile. Trainer assignment adjusts accordingly.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">What if I miss a scheduled session?</button>
+          <div class="faq-answer"><p>Sessions aren’t deducted, but frequent absences may affect trainer allocation.</p></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Technical Support -->
+    <div class="faq-category-item">
+      <button class="faq-category">⚙️ Technical Support</button>
+      <div class="faq-category-content">
+        <div class="faq-item">
+          <button class="faq-question">I’m having trouble logging in — what should I do?</button>
+          <div class="faq-answer"><p>Ensure credentials are correct. Reset your password if needed or contact support.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">Why isn’t my check-in showing?</button>
+          <div class="faq-answer"><p>Ensure you clicked "Check In" successfully. Refresh the page or try again.</p></div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question">How do I report a bug?</button>
+          <div class="faq-answer"><p>Use the form under the “Profile” or “Help” section to notify support.</p></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+    </main>
+  </div>
+
+  <script>
+    function toggleQuote() {
+      const front = document.getElementById('quote-front');
+      const back = document.getElementById('quote-back');
+      front.classList.toggle('hide');
+      back.classList.toggle('show');
+    }
+
+    const ctx = document.getElementById('attendanceChart').getContext('2d');
+    const attendanceChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: {{ labels|safe }},
+        datasets: [{
+          label: 'Hours in Gym',
+          data: {{ data|safe }},
+          backgroundColor: '#003366'
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    // BMI calculator logic
+    document.getElementById("heightType").addEventListener("change", function () {
+      const type = this.value;
+      document.getElementById("heightCmInput").style.display = type === "cm" ? "block" : "none";
+      document.getElementById("heightFtInput").style.display = type === "ft" ? "block" : "none";
+    });
+
+    function calculateBMI() {
+      const weight = parseFloat(document.getElementById("weight").value);
+      let height;
+
+      const type = document.getElementById("heightType").value;
+      if (type === "cm") {
+        height = parseFloat(document.getElementById("heightCm").value) / 100;
+      } else {
+        const ft = parseFloat(document.getElementById("heightFt").value);
+        const inch = parseFloat(document.getElementById("heightIn").value);
+        height = ((ft * 12) + inch) * 0.0254;
+      }
+
+      if (!weight || !height || height === 0) {
+        document.getElementById("bmiResult").innerText = "Please enter valid values.";
+        return;
+      }
+
+      const bmi = weight / (height * height);
+      let category = "";
+      if (bmi < 18.5) category = "Underweight";
+      else if (bmi < 24.9) category = "Normal (Healthy)";
+      else if (bmi < 29.9) category = "Overweight";
+      else category = "Obese";
+
+      document.getElementById("bmiResult").innerText = `Your BMI is ${bmi.toFixed(2)} (${category})`;
+    }
+
+    // FAQ toggle
+    // Category and question toggle logic
+document.querySelectorAll('.faq-category').forEach(button => {
+  button.addEventListener('click', () => {
+    const content = button.nextElementSibling;
+    content.classList.toggle('show');
+  });
+});
+
+document.querySelectorAll('.faq-question').forEach(button => {
+  button.addEventListener('click', () => {
+    const answer = button.nextElementSibling;
+    answer.classList.toggle('show');
+  });
+});
+
+  </script>
+
+</body>
+</html>

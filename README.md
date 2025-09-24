@@ -28,16 +28,27 @@ Project Structure
 
 
 FITIGYM/
-│── app.py                # Main Flask app
-│── db_config.py          # Database configuration
-│── mpesa_api.py          # M-Pesa integration
-│── schema.sql            # Database schema
+
+│── app.py                  # Main Flask app
+
+│── db_config.py            # Database configuration
+
+│── mpesa_api.py            # M-Pesa integration
+
+│── schema.sql              # Database schema
+
 │── setup_membership_plans.py
+
 │── setup_test_data.py
-│── static/               # CSS, JS, Images
-│── templates/            # HTML templates
-│── .env                  # Environment variables
+
+│── static/                 # CSS, JS, Images
+
+│── templates/              # HTML templates
+
+│── .env                    # Environment variables
+
 │── README.md
+
 
 Installation & Setup
 1. Clone the repository:

@@ -24,6 +24,9 @@ Tech Stack
 •	 Payment Integration: M-Pesa Daraja API
 •	Deployment: Docker (optional)
 Project Structure
+
+
+
 FITIGYM/
 │── app.py                # Main Flask app
 │── db_config.py          # Database configuration
